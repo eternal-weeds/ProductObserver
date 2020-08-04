@@ -329,28 +329,26 @@ def PostLINENotify(title, diffInfos):
 
 notifies = [YodobashiNotify(), BicCameraNotify()]
 
-counter = 0
-while True:  
-
-    time.sleep(300)
-    counter += 1
+try:
     
-    print(datetime.datetime.today())
+    while True:  
     
+        time.sleep(300)
+        
+        print(datetime.datetime.today())
+        
+        
+        for notify in notifies:
+            
+            diffInfos = notify.Update()
+            print(notify.GetTitle())
+            print(diffInfos)
+            PostLINENotify(notify.GetTitle(), diffInfos)
+        
+finally:
     
-    for notify in notifies:
-        
-        diffInfos = notify.Update()
-        print(notify.GetTitle())
-        print(diffInfos)
-        PostLINENotify(notify.GetTitle(), diffInfos)
-        
-        
-    if counter % 36 == 0:
-        
-        token = "***"
-        url = "https://notify-api.line.me/api/notify"
-        headers = {"Authorization": "Bearer " + token}
-        payload = {"message": '1'}
-        requests.post(url, headers=headers, data=payload)  
-        
+    token = "***"
+    url = "https://notify-api.line.me/api/notify"
+    headers = {"Authorization": "Bearer " + token}
+    payload = {"message": 'end'}
+    requests.post(url, headers=headers, data=payload)  
